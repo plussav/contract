@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Договор посуточного найма</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#171717;font-family:Arial,Helvetica,sans-serif}.wrap{max-width:980px;margin:auto;padding:20px}.toolbar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ddd;padding:12px;display:flex;gap:8px;flex-wrap:wrap;box-shadow:0 2px 10px #0001}.toolbar button{border:0;border-radius:10px;padding:11px 15px;background:#111;color:#fff;font-weight:700;cursor:pointer}.toolbar button.alt{background:#e9eaec;color:#111}.card,.page{background:#fff;border-radius:14px;box-shadow:0 5px 25px #00000012}.card{padding:18px;margin:18px 0}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fields label{font-size:13px;font-weight:700}.fields input{width:100%;margin-top:5px;padding:11px;border:1px solid #ccc;border-radius:8px;font-size:15px}.page{padding:35px 45px;margin:18px 0;line-height:1.45;font-size:14px}.title{text-align:center;font-weight:800;font-size:18px}.center{text-align:center}.section{font-weight:800;margin-top:16px}.sig{border:1px solid #bbb;border-radius:8px;width:100%;height:150px;touch-action:none;background:#fff}.sigrow{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:18px}.sigbox small{display:block;color:#666;margin:5px 0}.check{display:block;margin:8px 0}.check input{margin-right:8px}.muted{color:#666;font-size:12px}.danger{background:#fff4f4;border:1px solid #f0caca;padding:12px;border-radius:10px;font-size:13px}.no-print{}.filled{font-weight:600}.item{margin:4px 0}.notice{padding:12px;border-radius:10px;background:#f5f5f5;font-size:13px}.sig-controls{display:flex;justify-content:space-between;margin-top:6px}.sig-controls button{padding:7px 10px;border:0;border-radius:7px;background:#eee}.legal{font-size:12px;color:#555;margin-top:10px}
+@media(max-width:650px){.wrap{padding:8px}.page{padding:22px 18px;font-size:13px}.fields,.sigrow{grid-template-columns:1fr}.toolbar{position:relative}.toolbar button{flex:1}.title{font-size:16px}}
+@media print{body{background:#fff}.toolbar,.card,.no-print{display:none!important}.wrap{max-width:none;padding:0}.page{box-shadow:none;border-radius:0;margin:0;padding:15mm 14mm;page-break-after:always}.page:last-child{page-break-after:auto}.filled{font-weight:700}}
+</style>
+</head>
+<body>
+<div class="toolbar no-print"><button onclick="window.print()">Печать / PDF</button><button class="alt" onclick="clearAll()">Очистить</button></div>
+<div class="wrap">
+<div class="card no-print">
+<h2>Заполнение договора</h2>
+<div class="notice">Заполни поля ниже. Они автоматически появятся в договоре и акте. Подпись рисуется пальцем на телефоне или мышкой.</div>
+<div class="fields" style="margin-top:12px">
+<label>ФИО нанимателя<input data-f="fio" placeholder="Иванов Иван Иванович"></label>
+<label>ИИН<input data-f="iin" inputmode="numeric"></label>
+<label>Удостоверение личности №<input data-f="id"></label>
+<label>Место проживания<input data-f="address"></label>
+<label>Дата договора<input data-f="contractDate" placeholder="02.10.2026"></label>
+<label>Дата заезда<input data-f="startDate" placeholder="02.10.2026"></label>
+<label>Время заезда<input data-f="startTime" value="15:00"></label>
+<label>Дата выезда<input data-f="endDate" placeholder="03.10.2026"></label>
+<label>Время выезда<input data-f="endTime" value="12:00"></label>
+<label>Количество суток<input data-f="days" inputmode="numeric"></label>
+<label>Цена за сутки, ₸<input data-f="daily" inputmode="numeric"></label>
+<label>Общая стоимость, ₸<input data-f="total" inputmode="numeric"></label>
+<label>Гарантийный депозит, ₸<input data-f="deposit" inputmode="numeric"></label>
+</div>
+<h3>Подпись нанимателя</h3>
+<canvas id="signature" class="sig"></canvas><div class="sig-controls"><small class="muted">Нарисуй подпись в поле</small><button onclick="clearSig()">Очистить подпись</button></div>
+<div style="margin-top:12px"><label class="check"><input type="checkbox" id="agree"> Я подтверждаю, что ознакомился(ась) с текстом договора и данными перед подписанием.</label></div>
+<div class="legal">Эта веб-форма создаёт документ с графической подписью. Графическая подпись сама по себе не является ЭЦП и не заменяет требования закона к квалифицированной электронной подписи, если она требуется.</div>
+</div>
+
+<section class="page">
+<div class="title">ДОГОВОР КРАТКАСРОЧНОГО (ПОСУТОЧНОГО)<br>НАЙМА ЖИЛОГО ДОМА</div>
+<p class="center">г. Астана «<span class="filled" data-o="contractDate"> </span>» __________ 2026 г.</p>
+<p>ИП Рустемова, в лице Рустемовой Н.К., ИИИ 890211400423, действующая на основании Уведомления о начале деятельности в качестве ИП № KZ56UWQ08594255 от 06.05.2026г., именуемое в дальнейшем «Наймодатель», с одной стороны, и гражданин(ка) Ф.И.О. <span class="filled" data-o="fio">________________</span>, ИИН <span class="filled" data-o="iin">________________</span>, удостоверение личности № <span class="filled" data-o="id">________________</span>, именуемый(ая) в дальнейшем «Наниматель», с другой стороны, совместно именуемые «Стороны», заключили настоящий Договор о нижеследующем.:</p>
+<div class="section">1. ПРЕДМЕТ ДОГОВОРА</div>
+<p>1.1. Наймодатель предоставляет за плату, а Наниматель принимает во временное пользование жилое помещение (далее – «Объект»), расположенное по адресу: п.Аккайын участок 821, дом общей площадью 160 кв. м, баня 100 кв.м находящимися на территории бассейном, сауной, зоной отдыха, мебелью, бытовой техникой и иным имуществом.</p>
+<p>1.2. Объект предоставляется исключительно для временного пользования и отдыха.</p><p>1.3. Объект принадлежит Наймодателю на праве частной собственности.</p>
+<div class="section">2. СРОК АРЕНДЫ</div>
+<p>2.1. Срок найма устанавливается с <span class="filled" data-o="startTime">___</span> часов <span class="filled" data-o="startDate">__________</span> 2026 г. до <span class="filled" data-o="endTime">___</span> часов <span class="filled" data-o="endDate">__________</span> 2026 г. и составляет <span class="filled" data-o="days">_____</span> суток.</p>
+<p>2.2. Время заезда — с 15:00 часов, время выезда — до 12:00 часов, если иное не согласовано Сторонами в письменной форме.</p>
+<div class="section">3. ПОРЯДОК РАССЧЕТА</div>
+<p>3.1. Период проживания: с <span class="filled" data-o="startDate">__________</span> 2026 г. по <span class="filled" data-o="endDate">__________</span> 2026 г, всего <span class="filled" data-o="days">_____</span> суток.</p>
+<p>3.2. Оплата стоимости найма производится Нанимателем единовременно при заселении.</p><p>3.3. Стоимость найма составляет <span class="filled" data-o="daily">________</span> тенге за сутки. Общая стоимость проживания составляет <span class="filled" data-o="total">________</span> тенге.</p>
+<p>3.4. При заселении Наниматель вносит гарантийный депозит в размере <span class="filled" data-o="deposit">________</span> тенге.</p><p>3.5. При отсутствии ущерба имуществу, соблюдении условий настоящего Договора и после осмотра Объекта гарантийный депозит возвращается Нанимателю в полном объеме.</p>
+<div class="section">4.ОБЯЗАННОСТИ СТОРОН</div>
+<p><b>5.1. Наниматель обязан:</b></p>
+<p>4.1.1. Использовать Объект исключительно по назначению и в соответствии с условиями настоящего Договора.</p><p>4.1.2. Поддерживать Объект в исправном техническом, санитарном и противопожарном состоянии.</p><p>4.1.3. Своевременно оплатить стоимость найма.</p><p>4.1.4. Соблюдать требования пожарной безопасности. Запрещено в помещении курить сигареты и кальян. Штраф -30000тг.</p><p>4.1.5. Бережно относиться к дому, мебели, бытовой технике, бассейну, сауне, инженерным системам и иному имуществу.</p><p>4.1.6. Подписанием настоящего Договора подтвердить, что имущество передано ему в исправном состоянии и без претензий по комплектности, если иное не указано в акте приема-передачи.</p><p>4.1.7. Соблюдать чистоту, правила проживания и общественный порядок.</p><p>4.1.8. Использовать бассейн и сауну исключительно по назначению и соблюдать правила их эксплуатации.</p><p>4.1.9. Не допускать действий, способных привести к повреждению, загрязнению(штраф 30000) или порче имущества.</p><p>4.1.10. Незамедлительно уведомлять Наймодателя о выявленных повреждениях, неисправностях инженерных сетей или иных дефектах.</p><p>4.1.11. Возместить причиненный ущерб в случаях, предусмотренных настоящим Договором.</p>
+<p><b>4.2. Наймодатель обязан:</b></p><p>4.2.1. Передать Объект Нанимателю по акту приема-передачи.</p><p>4.2.2. Обеспечить возможность пользования Объектом в течение срока действия настоящего Договора.</p><p>4.2.3. Наниматель обязан осмотреть Объект, включая жилое помещение и имущество, и подтвердить его принятие в надлежащем состоянии путем подписания акта приема-передачи.</p>
+</section>
+
+<section class="page">
+<div class="section">5. РАСТОРЖЕНИЕ ДОГОВОРА</div><p>5.1. После внесения оплаты договор считается действительным на указанный в договоре срок.</p><p>5.2. Стороны обязаны предупреждать другую сторону о расторжении договора за неделю до срока вселения Нанимателя.</p><p>5.3. В случае расторжения договора по инициативе Нанимателя после указанного в п. 4.2. срока аванс в размере стоимости одного дня проживания не возвращается. При расторжении договора в процессе проживания по инициативе Нанимателя, удерживается сумма 100% от оставшейся суток проживания.</p>
+<div class="section">6. ОТВЕТСТВЕННОСТЬ СТОРОН</div><p>6.1. Ответственность за неисполнение обязательств по настоящему договору наступает в соответствии с договором и действующим законодательством РК.</p><p>6.2. В случае неисполнения или ненадлежащего исполнения условий договора виновная сторона возмещает потерпевшей стороне убытки, которая та понесла.</p><p>6.3.Наниматель несет полную материальную ответственность за сохранность дома, мебели, бытовой техники, бассейна, системы фильтрации бассейна, сауны и иного имущества, переданного ему в пользование.</p><p>6.4. В случае повреждения, загрязнения, засорения бассейна, фильтрационного оборудования, сауны либо иного имущества по вине Нанимателя или приглашенных им лиц Наниматель обязуется возместить причиненный ущерб в полном объеме.</p><p>6.5. Стоимость устранения повреждений, чистки бассейна, замены воды, ремонта оборудования, мебели и иного имущества удерживается из гарантийного депозита. Если суммы депозита недостаточно, Наниматель обязан возместить оставшуюся сумму в полном объеме.</p><p>6.6. Наниматель несет ответственность за действия всех лиц, приглашенных им на территорию Объекта.</p><p>6.7. При заселении и выезде производится фото- и видеофиксация состояния дома и имущества.</p>
+<div class="section">7. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЕ</div><p>7.1. Настоящий договор составлен в двух экземплярах, имеющих одинаковую юридическую силу.</p><p>7.2.Договор составлен на русском языке в 2-х экземплярах, имеющих одинаковую юридическую силу, один экземпляр выдается один экземпляр Нанимателью.</p><p>7.3. Любые изменения и дополнения к настоящему Договору имеют силу только в том случае, если они оформлены в письменном виде и подписаны обеими сторонами.</p><p>7.4. Все разногласия по основным условиям договора решаются либо путем совместного их урегулирования, либо путем обращения в суд.</p>
+<div class="section">РЕКВИЗИТЫ СТОРОН</div><div class="sigrow"><div><b>Наймодатель</b><p>ИП РУСТЕМОВА<br>ИИН 890211400423<br>АО «KASPI BANK»<br>ИИК: KZ 96722S000051642175<br>БИК: CASPKZA<br>КБе:19<br>Рустемова Н.К.</p>Подпись: _______________________</div><div><b>Наниматель</b><p>Ф.И.О.: <span class="filled" data-o="fio">________________</span><br>ИИН <span class="filled" data-o="iin">________________</span><br>Удостоверение личности № <span class="filled" data-o="id">___________</span><br>Место проживания <span class="filled" data-o="address">___________</span></p><img id="sigImg1" style="max-width:100%;height:70px;display:none"><div>Подпись: _______________________</div></div></div>
+</section>
+
+<section class="page">
+<div class="title">Приложение № 1<br>АКТ ПРИЕМА-ПЕРЕДАЧИ ЖИЛОГО ПОМЕЩЕНИЯ</div>
+<p>К настоящему Договору краткосрочного (посуточного) найма жилого помещения № ____________<br>От __ _____________2026г.</p><p>г. Астана от «_» __________ 2026г.</p>
+<p>Мы, нижеподписавшиеся Наймодатель: Индивидуальный предприниматель Рустемова, ИИН 890211400423, и Наниматель: <span class="filled" data-o="fio">________________________</span>, ИИН <span class="filled" data-o="iin">________________</span>, удостоверение личности № <span class="filled" data-o="id">________________</span>, составили настоящий Акт о нижеследующем:</p>
+<div class="section">1. Передача объекта</div><p>1.1. Наймодатель передал, а Наниматель принял во временное пользование жилой дом, расположенный по адресу: п.Аккайын, участок 821.</p><p>1.2. Дом передан в состоянии, пригодном для проживания, с исправными инженерными коммуникациями, мебелью, бытовой техникой, бассейном, сауной и иным имуществом.</p>
+<div class="section">2. Состояние объекта</div><p>На момент передачи:</p><label class="check"><input type="checkbox"> замечаний не имеется;</label><label class="check"><input type="checkbox"> имеются следующие замечания: ________________________________</label>
+<div class="section">3. Переданное имущество</div><p class="item"><b>Зал:</b> Телевизор (1 samsung) 1 пульт - 250 000 тг; Караоке (2шт микрофон, клавиатура, мышь, модем) - 800000тг; Роутер Бел 1 шт - 20000тг; Кондиционер (Midea) пульт - 480 000 тг; Стол (2шт) x1 - 90 000 тг; Стулья (22шт) x1 -12 000 тг; Камин - 300 000 тг; Диван(2шт)х1 - 480000тг; Ковер -1шт -28000тг.</p>
+<p class="item"><b>Кухня:</b> Духовка (Midea) - 180 000 тг; Микроволновка (Samsung) - 40 000 тг; Вытяжка (Midea) - 45 000 тг; Плита (Hansa) - 150 000 тг; Посудомоечная машина (Hansa) - 250 000 тг; Чайник (Midea) - 18 000 тг; Холодильник (Haier) + гостиничный холод - 230 000 тг; Смеситель - 20 000 тг; Мойка - 25 000 тг; Жалюзи - 40000тг; Чайник стек. - (3шт)x1 - 2500тг; Чайник зав. - (1шт) - 8500тг; Кружка набор - (24шт)х1 - 1500тг; Кружка стар. - (7шт)х1 - 1200тг; Кесе - (4шт)х1 - 800тг; Кесе пластик. - (3шт)х1 - 1000тг; Бокал - (25шт)х1 - 1000тг; Рюмка - (13шт)х1 - 500тг; Тарелка мал. - (24шт)х1 - 1000тг; Тарелка сред. - (24шт)х1 - 1500тг; Тарелка общ. - (36шт)х1 - 2300тг; Салфетница стек. - (2шт)х1 -2000тг; Салатница кругл. - (3шт)х1 - 2500тг; Салатница прямоуг. - (7шт)х1 - 2500тг; Холодное прм. - (3шт)х1 - 2500тг; Холодное круг. - (4шт)х1 - 2500тг; Лодочка - (2шт)х1 - 1500тг; Ваза круг+прм (восьмерка) - (4шт)х1 - 12000тг; Ваза без ножек (восьмерка)- (4шт) х1 - 13000тг; Этажерка - (2шт)х1 - 8000тг; АС табак желез. - (2шт)х1 - 6500тг; АС табак стекл. - (2шт)х1 - 6000тг; Подсвечники -(3шт)х1 - 4000тг; Декор для стола полотенца - (2шт)х1 - 2000тг; Пластик. тарелка - (2шт)х1 - 1000тг; Пластик. кружка - (5шт)х1 - 1000тг; Сетка для барбекю - 1шт - 3000тг; Шампура-(20шт)х1 - 500тг; Скалка- 1шт -1000тг; Ложка - (25шт)х1 - 800тг; Вилка -(30шт)х1 - 1000тг; Ст ложка-(20шт)х1 - 1000тг; Мантоварка- 1шт -14000тг; Щипцы -(2шт)х1 - 1200тг; Сковородка - 1шт сред - 4500тг; Сковородка -1 шт большая - 12000тг; Казан(Мечта) -1 шт -15000тг; Кастрюля для беш большая -1 шт -13500тг; Кастрюля сред -1шт -16000тг.</p>
+</section>
+<section class="page">
+<p class="item"><b>Уборная:</b> Стиральная/Сушильная машина - 630 000 тг; Зеркало с/y - 30 000 тг; Пылесос (samsung) - 40 000 тг; Швабра (hamettier) - 14 000 тг; Смеситель - 18 000 тг; Душ кабина - 180 000 тг; Мойка - 30 000 тг.</p>
+<p class="item"><b>Спальня:</b> Матрас - 40 000 тг; Бра (2шт) x1 - 15 000 тг; Кровать x1 - 58 000 тг; Телевизор (пульт 2шт ) х1 - 95000тг; Плейстейшн (2 джойстик)х1 - 370000тг.</p>
+<p class="item"><b>Прихожая:</b> Банкетка х1 - 20 000тг; Зеркало х1 - 140000 тг.</p>
+<p class="item"><b>Баня:</b> Садовая мебель (стол 1шт) + (стулья 6шт) - 150 000 тг; Обувница (2шт)х1 - 20000тг; Фен 1шт - 18000тг; Зеркало 1шт -15000тг; Смеситель (2шт)х1 -30000тг; Холодильник гост 1шт -72000тг; Банная шапка (4шт)х1 -800тг; Банная полотенца (4шт)х1 -3500тг; Шлепанцы (шт)х1 -2500тг.</p>
+<p>Все имущество проверено Нанимателем и принято в исправном состоянии, за исключением замечаний, указанных в разделе 2 настоящего Акта.</p>
+<div class="section">4. Фото- и видеофиксация</div><p>При передаче Объекта произведена фото- и (или) видеофиксация состояния дома, бассейна, сауны, мебели, бытовой техники и иного имущества.</p><p>Фото- и видеоматериалы являются приложением к настоящему Акту и могут использоваться в качестве доказательства состояния имущества при возврате Объекта.</p>
+<div class="section">5. Подтверждение сторон</div><p>Наниматель подтверждает, что:</p><label class="check"><input type="checkbox"> осмотрел жилой дом;</label><label class="check"><input type="checkbox"> проверил исправность мебели, бытовой техники, бассейна и сауны;</label><label class="check"><input type="checkbox"> претензий к техническому и санитарному состоянию Объекта не имеет (за исключением замечаний, указанных в разделе 2 настоящего Акта);</label><label class="check"><input type="checkbox"> получил имущество в полном объеме.</label><p>Настоящий Акт является неотъемлемой частью Договора найма жилого помещения.</p>
+<div class="section">Подписи сторон</div><div class="sigrow"><div>Наймодатель<br>ИП _________________________<br><br>Подпись ____________</div><div>Наниматель<br>Ф.И.О. <span class="filled" data-o="fio">______________________</span><br><br><img id="sigImg2" style="max-width:100%;height:70px;display:none"><div>Подпись ____________</div></div></div>
+</section>
+</div>
+<script>
+const fields=[...document.querySelectorAll('[data-f]')];
+function update(){fields.forEach(i=>{document.querySelectorAll(`[data-o="${i.dataset.f}"]`).forEach(e=>e.textContent=i.value||'________________')})}
+fields.forEach(i=>i.addEventListener('input',update)); update();
+const c=document.getElementById('signature'),ctx=c.getContext('2d');
+let drawing=false,last=null;
+
+function setupSig(){
+  const r=c.getBoundingClientRect();
+  const dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
+  const saved=(c.width&&c.height)?c.toDataURL('image/png'):null;
+  c.width=Math.max(1,Math.round(r.width*dpr));
+  c.height=Math.max(1,Math.round(r.height*dpr));
+  c.style.touchAction='none';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.lineWidth=2.5;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+  ctx.strokeStyle='#111';
+  if(saved){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,r.width,r.height);img.src=saved;}
+}
+function point(e){
+  const r=c.getBoundingClientRect();
+  const src=e.touches&&e.touches[0]?e.touches[0]:e;
+  return {x:src.clientX-r.left,y:src.clientY-r.top};
+}
+function startSig(e){
+  if(e.cancelable)e.preventDefault();
+  drawing=true;
+  last=point(e);
+  ctx.beginPath();
+  ctx.moveTo(last.x,last.y);
+  if(e.pointerId!=null && c.setPointerCapture){try{c.setPointerCapture(e.pointerId)}catch(_){} }
+}
+function moveSig(e){
+  if(!drawing)return;
+  if(e.cancelable)e.preventDefault();
+  const p=point(e);
+  ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+  last=p;
+}
+function endSig(e){
+  if(!drawing)return;
+  if(e.cancelable)e.preventDefault();
+  drawing=false;
+  saveSig();
+}
+setupSig();
+window.addEventListener('resize',setupSig);
+c.addEventListener('pointerdown',startSig,{passive:false});
+c.addEventListener('pointermove',moveSig,{passive:false});
+c.addEventListener('pointerup',endSig,{passive:false});
+c.addEventListener('pointercancel',endSig,{passive:false});
+c.addEventListener('lostpointercapture',endSig,{passive:false});
+// Fallback for older iOS/webviews that do not deliver pointer events reliably.
+c.addEventListener('touchstart',startSig,{passive:false});
+c.addEventListener('touchmove',moveSig,{passive:false});
+c.addEventListener('touchend',endSig,{passive:false});
+c.addEventListener('mousedown',startSig,{passive:false});
+c.addEventListener('mousemove',moveSig,{passive:false});
+c.addEventListener('mouseup',endSig,{passive:false});
+c.addEventListener('mouseleave',e=>{if(drawing)endSig(e)},{passive:false});
+function saveSig(){const src=c.toDataURL('image/png');['sigImg1','sigImg2'].forEach(id=>{let im=document.getElementById(id);im.src=src;im.style.display='block'});try{localStorage.setItem('sig',src)}catch(_){} }
+function clearSig(){const r=c.getBoundingClientRect(),dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));ctx.clearRect(0,0,r.width,r.height);['sigImg1','sigImg2'].forEach(id=>document.getElementById(id).style.display='none');try{localStorage.removeItem('sig')}catch(_){} }
+function clearAll(){fields.forEach(i=>i.value='');document.getElementById('agree').checked=false;clearSig();update()}
+if(localStorage.sig){document.getElementById('sigImg1').src=localStorage.sig;document.getElementById('sigImg2').src=localStorage.sig;document.getElementById('sigImg1').style.display='block';document.getElementById('sigImg2').style.display='block'}
+window.onbeforeprint=()=>{if(!document.getElementById('agree').checked){alert('Перед печатью подтвердите ознакомление с договором.');return false}}
+</script></body></html>
